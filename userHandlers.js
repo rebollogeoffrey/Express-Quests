@@ -12,46 +12,46 @@ const getUsers = (req, res) => {
         });
 };;
 
-// const getUsersById = (req, res) => {
-//     const id = parseInt(req.params.id);
+const getUsersById = (req, res) => {
+    const id = parseInt(req.params.id);
 
-//     database
-//         .query("select * from users where id = ?", [id])
-//         .then(([movies]) => {
-//             if (movies[0] != null) {
-//                 res.json(movies[0]);
-//             } else {
-//                 res.status(404).send("Not Found");
-//             }
-//         })
-//         .catch((err) => {
-//             console.error(err);
-//             res.status(500).send("Error retrieving data from database");
-//         });
-// };
+    database
+        .query("select * from users where id = ?", [id])
+        .then(([movies]) => {
+            if (movies[0] != null) {
+                res.json(movies[0]);
+            } else {
+                res.status(404).send("Not Found");
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send("Error retrieving data from database");
+        });
+};
 
-// const getUsersByLastName = (req, res) => {
-//     const lastname = req.params.lastname;
-//     console.log(req.params);
-//     console.log(lastname);
-//     console.log(typeof lastname);
+const getUsersByLastName = (req, res) => {
+    const lastname = req.params.lastname;
+    console.log(req.params);
+    console.log(lastname);
+    console.log(typeof lastname);
 
-//     if (lastname > 0) { console.log("PPPUUUUUUUUUUUUUUUUUUUUUu"); }
+    if (lastname > 0) { console.log("PPPUUUUUUUUUUUUUUUUUUUUUu"); }
 
-//     database
-//         .query("select * from users where lastname = ?", [lastname])
-//         .then(([movies]) => {
-//             if (movies[0] != null) {
-//                 res.json(movies[0]);
-//             } else {
-//                 res.status(404).send("Not Found");
-//             }
-//         })
-//         .catch((err) => {
-//             console.error(err);
-//             res.status(500).send("Error retrieving data from database");
-//         });
-// };
+    database
+        .query("select * from users where lastname = ?", [lastname])
+        .then(([movies]) => {
+            if (movies[0] != null) {
+                res.json(movies[0]);
+            } else {
+                res.status(404).send("Not Found");
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send("Error retrieving data from database");
+        });
+};
 
 const getUsersByParm = (req, res) => {
     const parm = req.params.parm;
@@ -86,16 +86,13 @@ const getUsersByParm = (req, res) => {
                 res.status(500).send("Error retrieving data from database");
             });
     }
-
-
 };
 
 
 
-// module.exports = {
-//     getUsers,
-//     getUsersById,
-//     getUsersByLastName,
-// };
-
-module.exports = { getUsers, getUsersByParm, }
+module.exports = {
+    getUsers,
+    getUsersById,
+    getUsersByLastName,
+    getUsersByParm
+};
