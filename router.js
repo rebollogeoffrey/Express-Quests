@@ -16,5 +16,6 @@ router.get("/api/users", userHandlers.getUsers);
 router.get("/api/users/:parm", userHandlers.getUsersByParm);
 
 router.post("/api/movies", movieHandlers.postMovie);
+router.post("/api/users", userHandlers.postUser);
 
 module.exports = { router };

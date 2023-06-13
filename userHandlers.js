@@ -32,11 +32,6 @@ const getUsersById = (req, res) => {
 
 const getUsersByLastName = (req, res) => {
     const lastname = req.params.lastname;
-    console.log(req.params);
-    console.log(lastname);
-    console.log(typeof lastname);
-
-    if (lastname > 0) { console.log("PPPUUUUUUUUUUUUUUUUUUUUUu"); }
 
     database
         .query("select * from users where lastname = ?", [lastname])
@@ -89,10 +84,29 @@ const getUsersByParm = (req, res) => {
 };
 
 
+const postUser = (req, res) => {
+    const { firstname, lastname, email, city, language } = req.body;
+
+    database
+        .query(
+            "INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
+            [firstname, lastname, email, city, language]
+        )
+        .then(([result]) => {
+            const userIdInserted = result.insertId;
+            res.location(`/api/movies/${userIdInserted}`).sendStatus(201);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send("Error saving the user");
+        });
+};
+
 
 module.exports = {
     getUsers,
     getUsersById,
     getUsersByLastName,
-    getUsersByParm
+    getUsersByParm,
+    postUser
 };

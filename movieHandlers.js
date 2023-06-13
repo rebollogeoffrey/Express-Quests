@@ -39,7 +39,9 @@ const postMovie = (req, res) => {
       [title, director, year, color, duration]
     )
     .then(([result]) => {
-      // wait for it
+      const movieIdInserted = result.insertId;
+      console.log(movieIdInserted);
+      res.location(`/api/movies/${movieIdInserted}`).sendStatus(201);
     })
     .catch((err) => {
       console.error(err);
