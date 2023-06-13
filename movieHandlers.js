@@ -40,7 +40,6 @@ const postMovie = (req, res) => {
     )
     .then(([result]) => {
       const movieIdInserted = result.insertId;
-      console.log(movieIdInserted);
       res.location(`/api/movies/${movieIdInserted}`).sendStatus(201);
     })
     .catch((err) => {
@@ -49,9 +48,32 @@ const postMovie = (req, res) => {
     });
 };
 
+const putMovie = (req, res) => {
+  const { title, director, year, color, duration } = req.body;
+  const id = parseInt(req.params.id);
+
+  database
+    .query(
+      "UPDATE movies SET title=?, director=?, year=?, color=?, duration=? WHERE id=?",
+      [title, director, year, color, duration, id]
+    )
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.status(404).send("Not Found");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error updating the movie");
+    })
+};
+
 
 module.exports = {
   getMovies,
   getMovieById,
   postMovie,
+  putMovie
 };
