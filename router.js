@@ -17,7 +17,6 @@ router.get("/api/users", userHandlers.getUsers);
 router.get("/api/users/:id", userHandlers.getUsersById);
 
 // POST
-// router.post("/api/movies", movieHandlers.postMovie);
 router.post("/api/users", validators.validateUser, userHandlers.postUser);
 router.post("/api/movies", validators.validateMovie, movieHandlers.postMovie);
 

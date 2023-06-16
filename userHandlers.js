@@ -3,10 +3,31 @@ const database = require("./database");
 const userHandlers = {
 
     getUsers: (req, res) => {
+        let sql = "select * from users";
+        const sqlValues = [];
+
+        if (req.query.city != null) {
+            sql += " where city = ?";
+            sqlValues.push(req.query.city);
+
+            if (req.query.language != null) {
+                sql += " and language = ?";
+                sqlValues.push(req.query.language);
+            }
+        } else if (req.query.language != null) {
+            sql += " where language = ?";
+            sqlValues.push(req.query.language);
+        }
+
+
         database
-            .query("select * from users")
-            .then(([movies]) => {
-                res.json(movies);
+            .query(sql, sqlValues)
+            .then(([users]) => {
+                if (users != null) {
+                    res.json(users);
+                } else {
+                    res.status(200).send("Not Found");
+                }
             })
             .catch((err) => {
                 console.error(err);
@@ -19,9 +40,9 @@ const userHandlers = {
 
         database
             .query("select * from users where id = ?", [id])
-            .then(([movies]) => {
-                if (movies[0] != null) {
-                    res.json(movies[0]);
+            .then(([users]) => {
+                if (users[0] != null) {
+                    res.json(users[0]);
                 } else {
                     res.status(404).send("Not Found");
                 }
@@ -37,9 +58,9 @@ const userHandlers = {
 
         database
             .query("select * from users where lastname = ?", [lastname])
-            .then(([movies]) => {
-                if (movies[0] != null) {
-                    res.json(movies[0]);
+            .then(([users]) => {
+                if (users[0] != null) {
+                    res.json(users[0]);
                 } else {
                     res.status(404).send("Not Found");
                 }
@@ -56,9 +77,9 @@ const userHandlers = {
         if (parm > 0) {
             database
                 .query("select * from users where id = ?", [parm])
-                .then(([movies]) => {
-                    if (movies[0] != null) {
-                        res.json(movies[0]);
+                .then(([users]) => {
+                    if (users[0] != null) {
+                        res.json(users[0]);
                     } else {
                         res.status(404).send("Not Found");
                     }
@@ -71,9 +92,9 @@ const userHandlers = {
         else {
             database
                 .query("select * from users where lastname = ?", [parm])
-                .then(([movies]) => {
-                    if (movies[0] != null) {
-                        res.json(movies[0]);
+                .then(([users]) => {
+                    if (users[0] != null) {
+                        res.json(users[0]);
                     } else {
                         res.status(404).send("Not Found");
                     }
