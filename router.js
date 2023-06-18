@@ -10,6 +10,7 @@ const validators = require("./validators");
 // GET
 router.get("/api", (req, res) => { res.status(200).send("Welcome to the API, add either /movies or /users for more info"); }
 );
+
 router.get("/api/movies", movieHandlers.getMovies);
 router.get("/api/movies/:id", movieHandlers.getMovieById);
 
@@ -17,13 +18,15 @@ router.get("/api/users", userHandlers.getUsers);
 router.get("/api/users/:id", userHandlers.getUsersById);
 
 // POST
-router.post("/api/users", validators.validateUser, userHandlers.postUser);
-router.post("/api/movies", validators.validateMovie, movieHandlers.postMovie);
+router.post("/api/users", validators.validateUser, userHandlers.createUser);
+router.post("/api/movies", validators.validateMovie, movieHandlers.createMovie);
 
 // PUT
-router.put("/api/movies/:id", validators.validateMovie, movieHandlers.putMovie);
-router.put("/api/users/:id", validators.validateUser, userHandlers.putUser);
-router.put("/api/movies/:id", movieHandlers.deleteMovie);
-router.put("/api/users/:id", userHandlers.deleteUser);
+router.put("/api/users/:id", validators.validateUser, userHandlers.updateUser);
+router.put("/api/movies/:id", validators.validateMovie, movieHandlers.updateMovie);
+
+// DELETE
+router.delete("/api/movies/:id", movieHandlers.deleteMovie);
+router.delete("/api/users/:id", userHandlers.deleteUser);
 
 module.exports = { router };

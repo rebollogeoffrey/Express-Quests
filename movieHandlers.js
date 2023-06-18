@@ -49,7 +49,7 @@ const movieHandlers = {
       });
   },
 
-  postMovie: (req, res) => {
+  createMovie: (req, res) => {
     const { title, director, year, color, duration } = req.body;
 
     database
@@ -67,7 +67,7 @@ const movieHandlers = {
       });
   },
 
-  putMovie: (req, res) => {
+  updateMovie: (req, res) => {
     const { title, director, year, color, duration } = req.body;
     const id = parseInt(req.params.id);
 

@@ -107,7 +107,7 @@ const userHandlers = {
     },
 
 
-    postUser: (req, res) => {
+    createUser: (req, res) => {
         const { firstname, lastname, email, city, language } = req.body;
 
         database
@@ -117,7 +117,7 @@ const userHandlers = {
             )
             .then(([result]) => {
                 const userIdInserted = result.insertId;
-                res.location(`/api/movies/${userIdInserted}`).sendStatus(201);
+                res.location(`/api/users/${userIdInserted}`).sendStatus(201);
             })
             .catch((err) => {
                 console.error(err);
@@ -125,7 +125,7 @@ const userHandlers = {
             });
     },
 
-    putUser: (req, res) => {
+    updateUser: (req, res) => {
         const { firstname, lastname, email, city, language } = req.body;
         const id = parseInt(req.params.id);
 
