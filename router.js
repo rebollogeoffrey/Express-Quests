@@ -6,6 +6,7 @@ const router = express.Router()
 const movieHandlers = require("./movieHandlers");
 const userHandlers = require("./userHandlers");
 const validators = require("./validators");
+const authenticators = require("./authenticators")
 
 // GET
 router.get("/api", (req, res) => { res.status(200).send("Welcome to the API, add either /movies or /users for more info"); }
@@ -18,11 +19,11 @@ router.get("/api/users", userHandlers.getUsers);
 router.get("/api/users/:id", userHandlers.getUsersById);
 
 // POST
-router.post("/api/users", validators.validateUser, userHandlers.createUser);
+router.post("/api/users", validators.validateUser, authenticators.hashPassword, userHandlers.createUser);
 router.post("/api/movies", validators.validateMovie, movieHandlers.createMovie);
 
 // PUT
-router.put("/api/users/:id", validators.validateUser, userHandlers.updateUser);
+router.put("/api/users/:id", validators.validateUser, authenticators.hashPassword, userHandlers.updateUser);
 router.put("/api/movies/:id", validators.validateMovie, movieHandlers.updateMovie);
 
 // DELETE

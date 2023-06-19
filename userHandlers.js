@@ -108,12 +108,12 @@ const userHandlers = {
 
 
     createUser: (req, res) => {
-        const { firstname, lastname, email, city, language } = req.body;
+        const { firstname, lastname, email, city, language, hashedPassword } = req.body;
 
         database
             .query(
-                "INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
-                [firstname, lastname, email, city, language]
+                "INSERT INTO users(firstname, lastname, email, city, language, hashedPassword) VALUES (?, ?, ?, ?, ?, ?)",
+                [firstname, lastname, email, city, language, hashedPassword]
             )
             .then(([result]) => {
                 const userIdInserted = result.insertId;
@@ -126,13 +126,13 @@ const userHandlers = {
     },
 
     updateUser: (req, res) => {
-        const { firstname, lastname, email, city, language } = req.body;
+        const { firstname, lastname, email, city, language, hashedPassword } = req.body;
         const id = parseInt(req.params.id);
 
         database
             .query(
-                "UPDATE users SET firstname=?, lastname=?, email=?, city=?, language=? WHERE id=?",
-                [firstname, lastname, email, city, language, id]
+                "UPDATE users SET firstname=?, lastname=?, email=?, city=?, language=?, hashedPassword=? WHERE id=?",
+                [firstname, lastname, email, city, language, hashedPassword, id]
             )
             .then(([result]) => {
                 if (result.affectedRows === 0) {
@@ -146,6 +146,7 @@ const userHandlers = {
                 res.status(500).send("Error updating the user");
             })
     },
+
     deleteUser: (req, res) => {
         const id = parseInt(req.params.id);
 
