@@ -127,44 +127,78 @@ const userHandlers = {
 
     updateUser: (req, res) => {
         const { firstname, lastname, email, city, language, hashedPassword } = req.body;
-        const id = parseInt(req.params.id);
+        const userId = parseInt(req.params.id);
+        const tokenId = req.payload.sub;
 
-        database
-            .query(
-                "UPDATE users SET firstname=?, lastname=?, email=?, city=?, language=?, hashedPassword=? WHERE id=?",
-                [firstname, lastname, email, city, language, hashedPassword, id]
-            )
-            .then(([result]) => {
-                if (result.affectedRows === 0) {
-                    res.status(404).send("Not Found");
-                } else {
-                    res.sendStatus(204);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-                res.status(500).send("Error updating the user");
-            })
+        if (userId === tokenId) {
+            database
+                .query(
+                    "UPDATE users SET firstname=?, lastname=?, email=?, city=?, language=?, hashedPassword=? WHERE id=?",
+                    [firstname, lastname, email, city, language, hashedPassword, userId]
+                )
+                .then(([result]) => {
+                    if (result.affectedRows === 0) {
+                        res.status(404).send("Not Found");
+                    } else {
+                        res.sendStatus(204);
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                    res.status(500).send("Error updating the user");
+                })
+        }
+        else {
+            res.sendStatus(403);
+        }
     },
 
     deleteUser: (req, res) => {
-        const id = parseInt(req.params.id);
+        const userId = parseInt(req.params.id);
+        const tokenId = req.payload.sub;
+
+        if (userId === tokenId) {
+            database
+                .query(
+                    "DELETE FROM users WHERE id=?",
+                    [userId]
+                )
+                .then(([result]) => {
+                    if (result.affectedRows === 0) {
+                        res.status(404).send("Not Found");
+                    } else {
+                        res.sendStatus(204);
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                    res.status(500).send("Error updating the user");
+                })
+        }
+        else {
+            res.sendStatus(403);
+        }
+    },
+
+    getUserByEmailWithPasswordAndPassToNext: (req, res, next) => {
+        const { email } = req.body;
 
         database
             .query(
-                "DELETE FROM users WHERE id=?",
-                [id]
+                "SELECT * FROM users WHERE email=?",
+                [email]
             )
-            .then(([result]) => {
-                if (result.affectedRows === 0) {
-                    res.status(404).send("Not Found");
+            .then(([users]) => {
+                if (users[0] != null) {
+                    req.user = users[0];
+                    next();
                 } else {
-                    res.sendStatus(204);
+                    res.sendStatus(401);
                 }
             })
             .catch((err) => {
                 console.error(err);
-                res.status(500).send("Error updating the user");
+                res.status(500).send("Error finding the Credentials");
             })
     },
 }

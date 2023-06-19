@@ -8,7 +8,9 @@ const userHandlers = require("./userHandlers");
 const validators = require("./validators");
 const authenticators = require("./authenticators")
 
-// GET
+
+//PUBLIC
+/////// GET
 router.get("/api", (req, res) => { res.status(200).send("Welcome to the API, add either /movies or /users for more info"); }
 );
 
@@ -18,15 +20,22 @@ router.get("/api/movies/:id", movieHandlers.getMovieById);
 router.get("/api/users", userHandlers.getUsers);
 router.get("/api/users/:id", userHandlers.getUsersById);
 
-// POST
+/////// POST
+router.post("/api/login", userHandlers.getUserByEmailWithPasswordAndPassToNext, authenticators.verifyPassword);
 router.post("/api/users", validators.validateUser, authenticators.hashPassword, userHandlers.createUser);
-router.post("/api/movies", validators.validateMovie, movieHandlers.createMovie);
 
-// PUT
+
+router.use(authenticators.verifyToken);
+
+// PRIVATE
+/////// POST
+router.post("/api/movies", authenticators.verifyToken, validators.validateMovie, movieHandlers.createMovie);
+
+/////// PUT
 router.put("/api/users/:id", validators.validateUser, authenticators.hashPassword, userHandlers.updateUser);
 router.put("/api/movies/:id", validators.validateMovie, movieHandlers.updateMovie);
 
-// DELETE
+/////// DELETE
 router.delete("/api/movies/:id", movieHandlers.deleteMovie);
 router.delete("/api/users/:id", userHandlers.deleteUser);
 

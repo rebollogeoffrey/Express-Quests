@@ -3,7 +3,7 @@ const Joi = require("joi");
 const validators = {
     validateMovie: (req, res, next) => {
         const moveiSchema = Joi.object({
-            title: Joi.string().email().max(255).required(),
+            title: Joi.string().max(255).required(),
             director: Joi.string().max(255).required(),
             year: Joi.string().max(255).required(),
             color: Joi.string().max(255).required(),
